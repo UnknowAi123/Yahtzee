@@ -19,7 +19,7 @@
     function splitText() {
       const text = document.getElementById('inputText').value;
       const lines = text.split(/\r?\n/); // separa por líneas
-      const chunkSize = 1000;
+      const chunkSize = 400;
       const filesContainer = document.getElementById('filesContainer');
       filesContainer.innerHTML = '';
 
