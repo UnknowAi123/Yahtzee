@@ -1,8 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dividir texto en partes de 200 líneas</title>
+</head>
 <body>
-<pre>
-AQUÍ PEGAS TODO TU TEXTO LARGO
-</pre>
+  <h1>Dividir texto en archivos .txt de 200 líneas</h1>
+
+  <textarea id="inputText" rows="20" cols="80"
+    placeholder="Pega aquí tu texto grande..."></textarea>
+  <br><br>
+  <button onclick="splitText()">Generar archivos</button>
+
+  <h2>Archivos generados:</h2>
+  <div id="filesContainer"></div>
+
+  <script>
+    function splitText() {
+      const text = document.getElementById('inputText').value;
+      const lines = text.split(/\r?\n/); // separa por líneas
+      const chunkSize = 1000;
+      const filesContainer = document.getElementById('filesContainer');
+      filesContainer.innerHTML = '';
+
+      if (!text.trim()) {
+        filesContainer.innerHTML = '<p>No hay texto.</p>';
+        return;
+      }
+
+      let partNumber = 1;
+
+      for (let i = 0; i < lines.length; i += chunkSize) {
+        const chunkLines = lines.slice(i, i + chunkSize);
+
+        // si el bloque está vacío, no generamos archivo
+        if (chunkLines.length === 0) continue;
+
+        const chunkText = chunkLines.join('\n');
+        const blob = new Blob([chunkText], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `part${partNumber}.txt`;
+        link.textContent = `Descargar part${partNumber}.txt`;
+        link.style.display = 'block';
+
+        filesContainer.appendChild(link);
+        partNumber++;
+      }
+    }
+  </script>
 </body>
 </html>
