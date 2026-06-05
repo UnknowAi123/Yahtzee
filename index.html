@@ -2,14 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Dividir texto en partes de 200 líneas</title>
+  <title>Trocear texto</title>
 </head>
 <body>
-  <h1>Dividir texto en archivos .txt de 200 líneas</h1>
+  <h1>Trocear texto en partes de 200 líneas</h1>
 
   <textarea id="inputText" rows="20" cols="80"
-    placeholder="Pega aquí tu texto grande..."></textarea>
+    placeholder="Pega aquí tu texto..."></textarea>
   <br><br>
+
   <button onclick="splitText()">Generar archivos</button>
 
   <h2>Archivos generados:</h2>
@@ -18,26 +19,19 @@
   <script>
     function splitText() {
       const text = document.getElementById('inputText').value;
-      const lines = text.split(/\r?\n/); // separa por líneas
-      const chunkSize = 200;
+      const lines = text.split(/\r?\n/);
+      const chunkSize = 200; // ← ← ← AQUÍ ESTÁ EL CHUNK
       const filesContainer = document.getElementById('filesContainer');
       filesContainer.innerHTML = '';
-
-      if (!text.trim()) {
-        filesContainer.innerHTML = '<p>No hay texto.</p>';
-        return;
-      }
 
       let partNumber = 1;
 
       for (let i = 0; i < lines.length; i += chunkSize) {
         const chunkLines = lines.slice(i, i + chunkSize);
-
-        // si el bloque está vacío, no generamos archivo
         if (chunkLines.length === 0) continue;
 
         const chunkText = chunkLines.join('\n');
-        const blob = new Blob([chunkText], { type: 'text/plain' });
+        const blob = new Blob([chunkText], { type: 'text/plain;charset=utf-8' });
         const url = URL.createObjectURL(blob);
 
         const link = document.createElement('a');
